@@ -1,0 +1,6 @@
+# 脚本可选依赖（按需安装；标准 PDF 检索/渲染与浏览器自动化）
+# 基础文字检索仅需 Python 标准库；以下为增强功能依赖。
+PyMuPDF>=1.23        # query_standard.py：PDF 渲染/扫描件取页
+playwright>=1.40     # query_customs.py：在华注册编号浏览器自动核查
+# 安装 Playwright 浏览器内核（系统已装 chromium/chrome 时可跳过，脚本会自动识别）：
+#   python -m playwright install chromium
