@@ -1,0 +1,27 @@
+# 品类“必需原料”要求（来自该品类产品标准/定义）
+meta: {name: required_ingredients_by_category, version: "1.0.0"}
+
+categories:
+  soy_sauce:
+    standard: GB 2717-2018
+    requires:
+      - {canonical: soy,   quote: "以大豆和/或脱脂大豆……为主要原料"}
+      - {canonical: wheat, quote: "以小麦和/或麸皮……为原料"}
+      - {canonical: salt,  quote: "经微生物发酵制成的液体调味品"}
+  wine:
+    standard: GB/T 15037-2006
+    requires:
+      - {canonical: grape, quote: "以新鲜葡萄或葡萄汁为原料"}
+  yogurt:
+    standard: GB 19302
+    requires:
+      - {canonical: milk, quote: "以生牛（羊）乳或乳粉为原料，经杀菌、接种发酵制成"}
+  chocolate:
+    standard: GB/T 19343
+    requires:
+      - {canonical: cocoa, quote: "以可可制品……为主要原料"}
+      - {canonical: sugar, quote: "……和/或糖等"}
+  fruit_juice:
+    standard: GB/T 31121
+    requires:
+      - {canonical: grape, quote: "以水果为原料（可多种）"}

@@ -1,0 +1,39 @@
+# 配料本体与推断知识（通用完整性引擎用）
+meta: {name: ingredient_ontology, version: "1.0.0"}
+
+canonical:
+  water: {aliases: [水, 饮用水, 纯化水, 纯净水, 蒸馏水, 矿泉水, 天然水, 冰, 生活饮用水]}
+  salt: {aliases: [盐, 食用盐, 食盐, 氯化钠, 精制盐]}
+  oil: {aliases: [油, 植物油, 食用油, 大豆油, 菜籽油, 葵花籽油, 玉米油, 花生油, 棕榈油, 起酥油, 食用植物油, 油脂]}
+  milk: {aliases: [生乳, 牛乳, 牛奶, 全脂乳, 脱脂乳, 乳, 复原乳, 全脂牛奶, 生鲜乳]}
+  sugar: {aliases: [糖, 白砂糖, 蔗糖, 果糖, 糖浆, 冰糖, 绵白糖, 食用糖]}
+  wheat: {aliases: [小麦, 小麦粉, 面粉, 全麦粉]}
+  soy: {aliases: [大豆, 黄豆, 大豆/黄豆, 豆粕, 脱脂大豆]}
+  cocoa: {aliases: [可可, 可可液块, 可可脂, 可可粉, 可可豆, 可可制品]}
+  grape: {aliases: [葡萄, 葡萄汁, 葡萄汁(浆)]}
+  culture: {aliases: [菌种, 发酵剂, 乳酸菌, 酵母, 酵母菌, 酒曲, 米曲, 曲菌, 发酵菌]}
+  benzoate: {aliases: [苯甲酸钠, 苯甲酸钾, 苯甲酸]}
+  sorbate: {aliases: [山梨酸, 山梨酸钾, 山梨酸钠]}
+  sulfite: {aliases: [二氧化硫, 焦亚硫酸钾, 焦亚硫酸钠, 亚硫酸, 亚硫酸盐]}
+
+physical_form:
+  liquid:      {requires_phase: [water, oil]}
+  semi_liquid: {requires_phase: [water, oil]}
+  semi_solid:  {requires_phase: [water, oil]}
+  paste:       {requires_phase: [water, oil]}
+  solid:       {requires_phase: []}
+
+process:
+  brine: {adds: [water, salt], note: 盐水/卤水，水保留}
+  salt_solution: {adds: [water, salt], note: 盐溶于水，水保留}
+  syrup: {adds: [water, sugar], note: 糖浆，水保留}
+  rehydration: {adds: [water], note: 泡发/复水，水保留}
+  boiling: {adds: [water], note: 熬煮，水保留（除非浓缩至干）}
+  dilution: {adds: [water], note: 稀释，水保留}
+  fermentation_in_liquid: {adds: [water], note: 液态发酵，水保留；发酵菌种（曲/酵母）属加工微生物，通常不作为配料强制标示}
+  liquid_fermentation: {adds: [water], note: 液态发酵，水保留；菌种为加工微生物}
+  frying: {adds: [oil], note: 油炸，油保留}
+  emulsification: {adds: [oil, water], note: 乳化，油/水保留}
+  baking: {adds: [water, wheat], note: 烘焙，水通常已挥发（可豁免水），但须标粉/油, evaporated: [water]}
+  distillation: {adds: [water], note: 蒸馏，水不以原形态保留, evaporated: [water]}
+  drying: {adds: [water], note: 干燥，水已挥发, evaporated: [water]}

@@ -1,0 +1,65 @@
+# 配料表完整性规则（common 层 · 全品类通用）
+# 检查类型 missing_required_ingredient：反向完整性核对
+version: "1.0.0"
+
+rules:
+  - id: GB7718-4.1.3.1.5-water
+    name: 加工中加入并保留的水应在配料表中标示
+    check:
+      type: missing_required_ingredient
+      field: ingredients
+      required_ingredient: 水
+      when:
+        any:
+          - physical_form: [liquid, semi_liquid, semi_solid, paste]
+          - process_adds_water: [brine, salt_solution, syrup, rehydration, boiling, dilution, fermentation_in_liquid]
+      except_when:
+        all: {water_evaporated: true}
+    route: engine
+    applies: {categories: all}
+    severity: nonconformity
+    citation: {file: GB7718-2011.pdf, clause: "4.1.3.1.5", quote: "在食品制造或加工过程中，加入的水应在配料表中标示。在加工过程中已挥发的水或其他挥发性配料不需要标示。", page: 4}
+    test_cases:
+      positive: [{physical_form: liquid, ingredients: "水、大豆、小麦、食用盐"}]
+      negative: [{physical_form: liquid, ingredients: "大豆、小麦、食用盐、白砂糖", solid_content_pct: 13}]
+
+  - id: GB7718-4.1.3.4-additive-in-list
+    name: 食品添加剂应在配料表中按通用名称标示
+    check:
+      type: declared_elsewhere_missing_in_ingredients
+      field: ingredients
+      detect: {text_signals: ["内含", "添加", "防腐剂", "抗氧化剂", "着色剂"]}
+      match_by: [generic_name, ins_number]
+    route: engine
+    applies: {categories: all}
+    severity: nonconformity
+    citation: {file: GB7718-2011.pdf, clause: "4.1.3.4", quote: "食品添加剂应当标示其在 GB 2760 中的食品添加剂通用名称。", page: 4}
+    test_cases:
+      positive: [{ingredients: "水、苯甲酸钠", body: "苯甲酸钠 0.6 g/kg"}]
+      negative: [{ingredients: "黄豆、小麦、食用盐", body: "内含苯甲酸钠 0.6 g/kg（防腐剂）"}]
+
+  - id: GB7718-4.1.3.1.3-compound-expansion
+    name: 复合配料应展开标示原始配料
+    check:
+      type: compound_ingredient_expansion
+      field: ingredients
+      threshold_pct: 25
+      exceptions: [{compound_has_national_standard: true}, {addition_less_than_25pct: true}]
+    route: engine
+    applies: {categories: all}
+    severity: nonconformity
+    citation: {file: GB7718-2011.pdf, clause: "4.1.3.1.3", quote: "如果某种配料是由两种或两种以上的其他配料构成的复合配料……应在配料表中标示复合配料的名称，随后将复合配料的原始配料在括号内按加入量的递减顺序标示。", page: 4}
+    test_cases:
+      positive: [{ingredients: "巧克力（可可液块、白砂糖、可可脂）"}]
+      negative: [{ingredients: "巧克力、小麦粉", compound_unknown: true}]
+
+  - id: GB7718-4.1.3.1.1-descending-order
+    name: 各种配料应按制造时加入量递减顺序排列
+    check:
+      type: ordering_check
+      field: ingredients
+      exceptions: [{added_less_than_2pct: true}]
+    route: engine
+    applies: {categories: all}
+    severity: irregularity
+    citation: {file: GB7718-2011.pdf, clause: "4.1.3.1.1", quote: "各种配料应按制造或加工食品时加入量的递减顺序一一排列；加入量不超过 2% 的配料可以不按递减顺序排列。", page: 4}
