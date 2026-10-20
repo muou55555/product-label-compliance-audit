@@ -1,0 +1,52 @@
+# 内置标准清单：用户无需再上传这些标准
+# text_layer=false 表示为扫描件，须渲染页面后视觉读取（见 query_standard.py render）
+standards:
+  GB7718:
+    title: 预包装食品标签通则
+    file: GB7718-2011.pdf
+    version: "2011"
+    pages: 20
+    text_layer: true
+    stage: 通用标签形式
+    key_pages:
+      基本要求: 3
+      强制标示内容: 4
+      净含量字符高度表3: 6
+      保质期豁免4.3: 7
+
+  GB2758:
+    title: 发酵酒及其配制酒
+    file: GB2758-2012.pdf
+    version: "2012"
+    pages: 4
+    text_layer: true
+    stage: 发酵酒品类
+    key_pages:
+      技术要求: 1
+      标签酒精度%vol: 1
+      警示语: 1
+
+  GB-T15037:
+    title: 葡萄酒
+    file: GB-T15037-2006.pdf
+    version: "2006"
+    pages: 11
+    text_layer: false
+    stage: 葡萄酒品类
+    key_pages:
+      分类含糖量: 2
+      感官表1: 7
+      理化表2: 8
+      标签8.1: 9
+      贮存9.2.5: 10
+
+  GB2760:
+    title: 食品添加剂使用标准
+    file: GB2760-2014.pdf
+    version: "2014"
+    pages: 473
+    text_layer: true
+    stage: 添加剂限量
+    key_pages:
+      葡萄酒SO2表A.1: 21
+      附录A使用规定: 18
