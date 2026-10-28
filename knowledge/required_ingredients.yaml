@@ -1,10 +1,15 @@
+# =====================================================================
 # 品类“必需原料”要求（来自该品类产品标准/定义）
+# 键为 category（与 category_manifest 对齐）；值为该品类定义所要求的基础原料。
+# 这些是“完整性”判定的权威依据之一；非穷举，未列品类走其它证据源+模型兜底。
+# =====================================================================
 meta: {name: required_ingredients_by_category, version: "1.0.0"}
 
 categories:
   soy_sauce:
     standard: GB 2717-2018
     requires:
+      - {canonical: water, quote: "在食品制造或加工过程中加入的水（GB 7718 4.1.3.1.5），酱油为液态、含水约87%"}
       - {canonical: soy,   quote: "以大豆和/或脱脂大豆……为主要原料"}
       - {canonical: wheat, quote: "以小麦和/或麸皮……为原料"}
       - {canonical: salt,  quote: "经微生物发酵制成的液体调味品"}
