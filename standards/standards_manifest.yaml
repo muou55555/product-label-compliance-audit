@@ -14,6 +14,22 @@ standards:
       净含量字符高度表3: 6
       保质期豁免4.3: 7
 
+  GB28050:
+    title: 预包装食品营养标签通则
+    file: GB28050-2011.pdf
+    version: "2011"
+    pages: 14
+    text_layer: true
+    stage: 营养标签（营养成分表）
+    trigger: 标签含营养成分表／营养标示／Nutrition Facts，或涉及能量、核心营养素、NRV、营养声称
+    key_pages:
+      强制标示4.1: 3
+      表达方式6.1: 3
+      表达单位表1: 4
+      NRV表A.1: 6
+      NRV修约A.2: 6
+      含量声称表C.1: 9
+
   GB2758:
     title: 发酵酒及其配制酒
     file: GB2758-2012.pdf
@@ -31,7 +47,7 @@ standards:
     file: GB-T15037-2006.pdf
     version: "2006"
     pages: 11
-    text_layer: false
+    text_layer: false        # 扫描件
     stage: 葡萄酒品类
     key_pages:
       分类含糖量: 2

@@ -1,6 +1,6 @@
 # 通用型食品标签合规审核 Skill
 
-> 版本： 参考VERSION文件　|　适用：任意预包装食品（含进口）
+> 版本：v1.6.0　|　适用：任意预包装食品（含进口），不局限于葡萄酒
 
 一个可移植的标签合规审核 Skill，把一次标签审核做成**确定性、可审计、可复现**的过程，
 并产出可交付的甲方正式报告（HTML / PDF）。
@@ -15,22 +15,24 @@
 
 ## 标准流程
 
-1. 采集与识别：标签原图逐字识别，产出结构化事实 `LabelFacts`；
-2. 第一步·标签形式审核：对照 GB 7718 逐条检查；
-3. 第二步·内容合规审核：限量查表 + 品类专属指标 + 贮存条件；
-4. 资质核查：进口核查在华注册编号，国内核查生产许可；
-5. 逐条判定：每条规则输出结论 + 原因 + 依据原文；
-6. 生成报告并导出：甲方正式报告（HTML / PDF）。
+1. 采集与识别：多图逐张枚举，逐张编号、建立源图清单，产出结构化事实 `LabelFacts`；
+2. **【强制】配料引擎双检（完整性 + 名称合规性）**：跑 `ingredient_completeness.py` 与
+   `ingredient_name_check.py`，再做 6 项人工复核（形态反推/配料首位/添加剂入表/基础配料/名称具体性/修饰词声称）；
+3. 第一步·标签形式审核：对照 GB 7718 逐条检查；
+4. 第二步·内容合规审核：限量查表 + 品类专属指标 + 贮存条件（含营养标签触发式 GB 28050 审核）；
+5. 资质核查：进口核查在华注册编号，国内核查生产许可；
+6. 逐条判定：每条规则输出结论 + 原因 + 依据原文；
+7. 生成报告并导出：每张源图作为独立证据，跑证据完整性校验，产出甲方正式报告（HTML / PDF）。
 
 ## 目录结构
 
 ```
 SKILL.md                 入口与流程
 VERSION / CHANGELOG.md   版本号与更新记录
-knowledge/               配料本体 / 品类必需原料 / 完整性规则
+knowledge/               配料本体 / 品类必需原料 / 完整性 / 名称修饰词
 references/              七份参考文档（流程、引擎、标准、编号、报告、完整性）
-scripts/                 可复用脚本
-standards/               内置四份标准 PDF（无需用户上传）
+scripts/                 可复用脚本（含名称检查、证据完整性校验）
+standards/               内置五份标准 PDF（无需用户上传）
 ```
 
 ## 通用配料完整性引擎
@@ -52,14 +54,16 @@ standards/               内置四份标准 PDF（无需用户上传）
 python3 scripts/query_standard.py list
 python3 scripts/query_standard.py search "二氧化硫" --std GB2760
 
-# 配料完整性检查
+# 配料完整性 + 名称合规性检查
 python3 scripts/ingredient_completeness.py facts.json --json
+python3 scripts/ingredient_name_check.py --ingredients "天然香辛料" --json
 
 # 在华注册编号核查（Playwright 兜底）
 python3 scripts/query_customs.py CGEO23012201060023 --out result.json --shot shot.png
 
-# 生成甲方报告并转 PDF
+# 生成甲方报告、校验证据完整性、转 PDF
 python3 scripts/build_audit_report.py audit_data.json -o report.html
+python3 scripts/check_report_evidence.py report.html --expect <源图数>
 python3 scripts/html_to_pdf.py report.html report.pdf
 ```
 
@@ -68,9 +72,13 @@ python3 scripts/html_to_pdf.py report.html report.pdf
 | 标准 | 用途 |
 |---|---|
 | GB 7718-2011 预包装食品标签通则 | 通用标签形式 |
+| GB 28050-2011 预包装食品营养标签通则 | 营养标签（触发式：含营养表时） |
 | GB 2758-2012 发酵酒及其配制酒 | 发酵酒品类 |
 | GB/T 15037-2006 葡萄酒 | 葡萄酒品类（扫描件） |
 | GB 2760-2014 食品添加剂使用标准 | 添加剂限量 |
+
+### 标准下载地址
+- GB 28050-2011（海关总署官网）：http://www.customs.gov.cn/spj/fileDir/resource/cms/article/4576901/4648307/2022102815214079268.pdf
 
 审核以最新现行版本为准；新增标准放入 `standards/` 并在 manifest 登记即可。
 
